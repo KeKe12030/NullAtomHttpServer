@@ -3,7 +3,6 @@ package com.nullatom.httpserver;
 import com.nullatom.httpserver.handler.NAServerHandler;
 import com.nullatom.httpserver.utils.Dispatcher;
 import com.nullatom.httpserver.utils.Response;
-import com.sun.istack.internal.NotNull;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,7 +10,7 @@ import java.net.Socket;
 import java.util.Scanner;
 
 /**
- * NAHTTP服务器对象
+ * NAHTTP服务器对象，通过new NAServer(port);创建
  *
  * @author VioletTec
  *
@@ -22,6 +21,9 @@ public class NAServer implements Runnable{
     private int port = 50000;//NAServer端口默认50000
     private NAServerHandler handler = null;//handler类
 
+    /**
+     * @param port NAServer运行的端口
+     * */
     public NAServer(int port){
         this.port = port;
     }
@@ -92,8 +94,11 @@ public class NAServer implements Runnable{
      * 设置NAServer的handler对象
      * @param handler 处理类，禁止为null
      * */
-    @NotNull
+
     public void setHandler(NAServerHandler handler){
+        if(handler==null){
+            throw new RuntimeException("Handler不得为NULL");
+        }
         this.handler = handler;
     }
 

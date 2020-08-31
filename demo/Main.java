@@ -1,5 +1,3 @@
-package com.nullatom.httpserver;
-
 import com.nullatom.httpserver.handler.NAServerHandler;
 import com.nullatom.httpserver.utils.Request;
 import com.nullatom.httpserver.utils.Response;
@@ -9,6 +7,7 @@ import java.util.Scanner;
 
 /**
  * 演示类，用于测试NAServer
+ * @author VioletTec
  * */
 public class Main {
 
