@@ -174,9 +174,10 @@ public class Request {
             String key = kv[0];
             String value = kv[1]==null?null:decode( kv[1],"utf-8");//使用UTF8方式解码浏览器的编码为中文
             //存储到map中
-            if(!parameterMap.containsKey(key)) { //第一次
+            if(!parameterMap.containsKey(key)) { //第一次添加参数，需要初始化提案加ArrayList
                 parameterMap.put(key, new ArrayList<String>());
             }
+            //如果是多次，可以一个参数累加多个参数值
             parameterMap.get(key).add(value);
         }
     }
@@ -193,7 +194,6 @@ public class Request {
         try {
             return java.net.URLDecoder.decode(value, enc);
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;

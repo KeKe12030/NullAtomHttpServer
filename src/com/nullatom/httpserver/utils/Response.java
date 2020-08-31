@@ -120,14 +120,15 @@ public class Response {
         }
         //2、响应头(最后一行存在空行):
         headInfo.append("Date:").append(new Date()).append(CRLF);
-        headInfo.append("Server:").append("NAHTTPServer;charset=UTF-8").append(CRLF);
-        headInfo.append("Content-type:"+responseType).append(CRLF);
+        headInfo.append("Server:").append("NullAtomHttpServer").append(CRLF);
+        headInfo.append("Content-type:"+responseType+";charset=utf-8").append(CRLF);
         headInfo.append("Content-length:").append(len).append(CRLF);
         headInfo.append(CRLF);
     }
 
     /**
-     * 设置服务器返回给客户端的返回内容类型，默认为 text/html
+     * 设置服务器返回给客户端的返回内容类型，默认为 text/html，所有responseType后自动添加一个;charset=utf-8
+     * <p>如：setResponseType("text/json");</p>
      * @param responseType 需要设置的返回类型
      * */
     public void setResponseType(String responseType) {
