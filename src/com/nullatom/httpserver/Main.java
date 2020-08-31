@@ -6,6 +6,10 @@ import com.nullatom.httpserver.utils.Response;
 
 import java.util.Scanner;
 
+
+/**
+ * 演示类，用于测试NAServer
+ * */
 public class Main {
 
     public static void main(String[] args) {
