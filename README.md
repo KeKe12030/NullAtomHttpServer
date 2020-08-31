@@ -11,6 +11,7 @@
 ---
 ### 使用方法：
 + 下载NullAtomHttpServer.jar之后，当作依赖导入你的项目。
+  （下载地址：https://github.com/KeKe12030/NullAtomHttpServer/releases）
 + `NAServer.java`为 NAHttpServer 的核心类 （从这里开始）
 + 创建一个实现了`com.nullatom.httpserver.handler.NAServerHandler`的`Handler`类
 
