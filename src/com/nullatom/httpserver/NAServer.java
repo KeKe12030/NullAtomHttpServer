@@ -43,7 +43,7 @@ public class NAServer implements Runnable{
             throw new RuntimeException("请添加NAServerHandler");
         }
         try {
-            serverSocket =  new ServerSocket(50000);
+            serverSocket =  new ServerSocket(port);
             isRunning = true;
             receive();
         } catch (IOException e) {

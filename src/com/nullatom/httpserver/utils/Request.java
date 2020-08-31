@@ -38,7 +38,7 @@ public class Request {
     //状态
     private boolean isOK = true;//链接是否正常
 
-    private final String pattern = "content-length:\\s(\\d+)";
+    private final String pattern = "content-length:\\s(\\d+)\r\n";
     private final Pattern r = Pattern.compile(pattern);
     private Matcher m = null;
 
@@ -50,36 +50,42 @@ public class Request {
     public Request(InputStream is) {
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
         parameterMap = new HashMap<String,List<String>>();
-        byte[] bytes = new byte[1024];
-        int len = 0;
+        int temp = 0;
+        byte[] bytes = new byte[1024];//一次读取1024字节
         StringBuilder requestInfoSb = new StringBuilder();
         try {
-            String[] infos = null;//存放数据大小的数组，[1]是数据大小，记得trim一下再转换为Integer
-            while(true){
-                String info = br.readLine();
-                requestInfoSb.append(info+CRLF);
-                if (this.method==null && info.contains("/")) {
-                    this.method = info.substring(0, info.indexOf("/")).toLowerCase().trim();//获取请求方法
-                }
-                String group = "";
-                if(this.method.equals("post")) {//如果是POST方式，则\r\n\r\n有参数
-                    if (info.toLowerCase().contains("content-length:")) {
-                        m = r.matcher(info.toLowerCase());
-                        if (m.matches()) {
-                            group = m.group();
-                            infos = group.split(":");
-                        } else {
-                            continue;
+            while((temp=is.read(bytes))!=-1){
+                String[] infos = null;//存放数据大小的数组，[1]是数据大小，记得trim一下然后再换为Integer
+                requestInfoSb.append(new String(bytes,0,temp));
+
+                if (requestInfoSb.toString().contains("\r\n\r\n")) {//如果头部信息读取完毕
+                    if(this.method==null) {
+                        this.method = requestInfoSb.substring(0, requestInfoSb.indexOf("/")).toLowerCase().trim();//获取请求方法
+                    }
+                    if (infos==null) {
+                        String group = "";
+                        if (this.method.equals("post")) {//如果是POST方式，则\r\n\r\n有参数
+                            if (requestInfoSb.toString().toLowerCase().contains("content-length:")) {
+                                m = r.matcher(requestInfoSb.toString().toLowerCase());
+                                while(m.find()) {
+                                    infos = m.group().split(":");
+                                }
+                            }
+                        } else {//如果是GET或者其他方式，则是以\r\n\r\n结尾的
+                            if (requestInfoSb.toString().contains("\r\n\r\n")) {
+                                break;
+                            }
                         }
                     }
-                    //如果sb的大小等于Content-length的大小，则结束循环
-                    if (infos != null && Integer.valueOf(infos[1].trim()) == requestInfoSb.substring(requestInfoSb.indexOf("\r\n\r\n") + 2, requestInfoSb.length()).toString().getBytes().length) {
-                        break;
-                    }
-                }else{//如果是GET或者其他方式，则是以\r\n\r\n结尾的
-                    if(requestInfoSb.toString().contains("\r\n\r\n")){
 
-                        break;
+                }
+                if(infos != null){
+                    //如果sb的大小等于Content-length的大小，则结束循环
+                    if (infos != null ) {
+                        if (Integer.valueOf(infos[1].trim()) == requestInfoSb.substring(requestInfoSb.indexOf("\r\n\r\n") + 4, requestInfoSb.length()).toString().getBytes().length) {
+                            //如果包内的内容长度和报头的content-length长度一样，则停止读取
+                            break;
+                        }
                     }
                 }
 

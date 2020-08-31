@@ -13,7 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        NAServer naServer = new NAServer(50000);
+        NAServer naServer = new NAServer(50001);
         naServer.setHandler(new NAServerHandler() {
             @Override
             public void handle(Request request, Response response) {

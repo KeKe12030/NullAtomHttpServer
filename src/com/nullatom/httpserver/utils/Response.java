@@ -28,6 +28,9 @@ public class Response {
 
     private final static String CRLF = "\r\n";//回车
 
+
+    private String responseType = "text/html";//默认返回内容为HTML
+
     /**
      * 无参构造器，初始化变量
      * */
@@ -118,9 +121,17 @@ public class Response {
         //2、响应头(最后一行存在空行):
         headInfo.append("Date:").append(new Date()).append(CRLF);
         headInfo.append("Server:").append("NAHTTPServer;charset=UTF-8").append(CRLF);
-        headInfo.append("Content-type:text/html").append(CRLF);
+        headInfo.append("Content-type:"+responseType).append(CRLF);
         headInfo.append("Content-length:").append(len).append(CRLF);
         headInfo.append(CRLF);
+    }
+
+    /**
+     * 设置服务器返回给客户端的返回内容类型，默认为 text/html
+     * @param responseType 需要设置的返回类型
+     * */
+    public void setResponseType(String responseType) {
+        this.responseType = responseType;
     }
 
 }
